@@ -28,6 +28,16 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+    from werkzeug.security import generate_password_hash
+    try:
+        db.execute(
+            "INSERT INTO user (username, password, is_admin) VALUES (?, ?, ?)",
+            ("admin", generate_password_hash("admin"), 1)
+        )
+        db.commit()
+    except db.IntegrityError:
+        pass
+
 
 @click.command('init-db')
 def init_db_command():

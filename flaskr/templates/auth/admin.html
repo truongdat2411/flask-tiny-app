@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Admin Posts{% endblock %}</h1>
+  <div class="nav-right">
+    <a href="{{ url_for('blog.create') }}" class="new-post-link">New Post</a>
+    <a href="{{ url_for('auth.user_management') }}" class="user-management-link">User Management</a>
+  </div>
+  <style>
+    .container { display: flex; justify-content: space-between; }
+    .posts { width: 100%; }
+    .post { 
+      margin-bottom: 2em; 
+      border-bottom: 1px solid #ddd; 
+      padding-bottom: 1em; 
+      position: relative; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+    .post-content { flex-grow: 1; }
+    .post-actions { 
+      margin-left: 1em; 
+      display: flex; 
+      align-items: center; 
+    }
+    .nav-right { float: right; margin-bottom: 1em; }
+    .nav-right a { 
+      text-decoration: none; 
+      color: #273ed5; /* Màu xanh lá cây như trong ảnh */
+      padding: 0.5em 1em; 
+      margin-left: 1em;
+    }
+    .nav-right a:hover { text-decoration: underline; }
+    .danger { 
+      background-color: lightblue; 
+      color: white; 
+      border: none; 
+      padding: 0.5rem 1rem; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      margin-right: 0.5rem;
+    }
+    .danger:hover { background-color: #add8e6; } /* Lightblue đậm hơn khi hover */
+  </style>
+{% endblock %}
+
+{% block content %}
+  {% if not g.user.is_admin %}
+    <p>You don't have permission to access this page.</p>
+  {% else %}
+    <div class="container">
+      <!-- Posts List -->
+      <div class="posts">
+        {% for post in posts %}
+          <div class="post">
+            <div class="post-content">
+              <h2>{{ post.title }}</h2>
+              <div>
+                By {{ post.username }} on {{ post.created.strftime('%Y-%m-%d') }}
+              </div>
+              <p>{{ post.body }}</p>
+            </div>
+            <div class="post-actions">
+              <form action="{{ url_for('auth.delete_post', post_id=post.id) }}" method="post" style="display: inline;">
+                <input type="submit" value="delete" class="danger" onclick="return confirm('Are you sure?');">
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

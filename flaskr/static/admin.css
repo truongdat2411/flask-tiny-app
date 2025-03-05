@@ -1,0 +1,9 @@
+/* Admin page styles */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; background-color: #f4f4f4; font-weight: bold; }
+td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+tr:hover { background-color: #f5f5f5; }
+.danger { background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; margin-right: 0.5rem; }
+.warning { background-color: #ffc107; color: black; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+.danger:hover { background-color: #c82333; }
+.warning:hover { background-color: #e0a800; }
