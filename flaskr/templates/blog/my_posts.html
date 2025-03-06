@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+  {% if g.user %}
+    <div class="newdelete">
+      <a href="{{ url_for('blog.create') }}" class="new-link">New</a>
+      <button id="toggleMultipleDelete" class="danger">Multiple Delete</button>
+      <a href="{{ url_for('blog.index') }}">Back</a>
+    </div>
+  {% endif %}
+  <style>
+    .newdelete {
+      float: right;
+    }
+    .new-link {
+      text-decoration: none;
+      color: #377ba8; /* Màu xanh lá cây như trong ảnh */
+      padding: 0.5em 1em;
+      margin-right: 1em;
+    }
+    .new-link:hover {
+      text-decoration: underline;
+    }
+    .danger {
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+    .danger:hover {
+      text-align: underline;
+    }
+    .post {
+      margin-bottom: 2em;
+    }
+    .about {
+      color: #666;
+      font-style: italic;
+    }
+    .action {
+      margin-left: 1em;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .action:hover {
+      text-decoration: underline;
+    }
+    .checkbox-container {
+      display: none; /* Ẩn checkbox ban đầu */
+    }
+    .confirm-delete-btn {
+      display: none; /* Ẩn nút Confirm Delete ban đầu */
+      background-color: #dc3545; /* Màu đỏ cho nút xác nhận xóa */
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    .confirm-delete-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <form id="deleteMultipleForm" method="post" action="{{ url_for('blog.delete_multiple') }}">
+    {% for post in posts %}
+      <article class="post">
+        <header>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div class="checkbox-container">
+                <input type="checkbox" name="post_ids" value="{{ post.id }}">
+              </div>
+              <h1>{{ post['title'] }}</h1>
+              <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+            </div>
+            {% if g.user['id'] == post['author_id'] %}
+              <div>
+                <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+              </div>
+            {% endif %}
+          </div>
+        </header>
+        <p class="body">{{ post['body'] }}</p>
+      </article>
+      {% if not loop.last %}
+        <hr>
+      {% endif %}
+    {% endfor %}
+    <button type="submit" class="confirm-delete-btn">Confirm Delete</button>
+  </form>
+
+  <script>
+    document.getElementById('toggleMultipleDelete').addEventListener('click', function() {
+      const checkboxes = document.querySelectorAll('.checkbox-container');
+      const confirmBtn = document.querySelector('.confirm-delete-btn');
+      const isVisible = checkboxes[0].style.display === 'block';
+
+      // Chuyển đổi trạng thái hiển thị
+      checkboxes.forEach(checkbox => {
+        checkbox.style.display = isVisible ? 'none' : 'block';
+      });
+      confirmBtn.style.display = isVisible ? 'none' : 'block';
+
+      // Thay đổi text của nút toggle
+      this.textContent = isVisible ? 'Multiple Delete' : 'Cancel Multiple Delete';
+    });
+  </script>
+{% endblock %}

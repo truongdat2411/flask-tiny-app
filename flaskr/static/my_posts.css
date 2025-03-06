@@ -1,0 +1,79 @@
+/* static/css/my_posts.css */
+.newdelete {
+    float: right;
+    margin-bottom: 1em;
+  }
+  
+  .new-link {
+    text-decoration: none;
+    color: #28a745;
+    padding: 0.5em 1em;
+    margin-right: 1em;
+  }
+  
+  .new-link:hover {
+    text-decoration: underline;
+  }
+  
+  .my-posts-link {
+    text-decoration: none;
+    color: #28a745;
+    padding: 0.5em 1em;
+    margin-right: 1em;
+  }
+  
+  .my-posts-link:hover {
+    text-decoration: underline;
+  }
+  
+  .danger {
+    background-color: lightblue;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+  }
+  
+  .danger:hover {
+    background-color: #add8e6;
+  }
+  
+  .post {
+    margin-bottom: 2em;
+  }
+  
+  .about {
+    color: #666;
+    font-style: italic;
+  }
+  
+  .action {
+    margin-left: 1em;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .action:hover {
+    text-decoration: underline;
+  }
+  
+  .checkbox-container {
+    display: none;
+  }
+  
+  .confirm-delete-btn {
+    display: none;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1em;
+  }
+  
+  .confirm-delete-btn:hover {
+    background-color: #c82333;
+  }
