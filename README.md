@@ -17,7 +17,17 @@
     - Manage user 
 
 ### Setting instruction
+1. Open Command Prompt, navigate to the project folder and run this command:
+```$ setup.py```
 
+
+2. Then press `Ctrl` and click on the link: ```http://127.0.0.1:5000```
+![alt text](setup.png)
+
+
+3. Then register or login. Admin account:
+    - username: ```admin```
+    - password: ```admin```
 
 ### Link project 
     
