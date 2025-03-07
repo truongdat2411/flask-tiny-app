@@ -8,16 +8,24 @@ from flaskr.db import get_db
 
 bp = Blueprint('blog', __name__)
 
+PER_PAGE = 10
+
 @bp.route('/')
 @login_required
 def index():
     db = get_db()
+    page = request.args.get('page', 1, type=int)  # Lấy trang hiện tại, mặc định là 1
+    offset = (page - 1) * PER_PAGE
     posts = db.execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
+        ' ORDER BY created DESC '
+        'LIMIT ? OFFSET ?',
+        (PER_PAGE, offset)
     ).fetchall()
-    return render_template('blog/index.html', posts=posts)
+    total_posts = db.execute('SELECT COUNT(*) FROM post').fetchone()[0]
+    total_pages = (total_posts + PER_PAGE - 1) // PER_PAGE  # Tính tổng số trang
+    return render_template('blog/index.html', posts=posts, page=page, total_pages=total_pages)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -123,14 +131,19 @@ def delete_multiple():
 @login_required
 def my_posts():
     db = get_db()
+    page = request.args.get('page', 1, type=int)  # Lấy trang hiện tại, mặc định là 1
+    offset = (page - 1) * PER_PAGE
     posts = db.execute(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' WHERE p.author_id = ?'
-        ' ORDER BY created DESC',
-        (g.user['id'],)
+        ' ORDER BY created DESC'
+        ' LIMIT ? OFFSET ?',
+        (g.user['id'], PER_PAGE, offset)
     ).fetchall()
-    return render_template('blog/my_posts.html', posts=posts)
+    total_posts = db.execute('SELECT COUNT(*) FROM post WHERE author_id = ?', (g.user['id'],)).fetchone()[0]
+    total_pages = (total_posts + PER_PAGE - 1) // PER_PAGE  # Tính tổng số trang
+    return render_template('blog/my_posts.html', posts=posts, page=page, total_pages=total_pages)
 
 def get_post(id, check_author=True):
     post = get_db().execute(

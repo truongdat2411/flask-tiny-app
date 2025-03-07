@@ -93,6 +93,17 @@
       {% endif %}
     {% endfor %}
     <button type="submit" class="confirm-delete-btn">Confirm Delete</button>
+    <div class="pagination">
+      {% if page > 1 %}
+        <a href="{{ url_for('blog.my_posts', page=page-1) }}">Previous</a>
+      {% endif %}
+      {% for p in range(1, total_pages + 1) %}
+        <a href="{{ url_for('blog.my_posts', page=p) }}" {% if p == page %}style="font-weight: bold;"{% endif %}>{{ p }}</a>
+      {% endfor %}
+      {% if page < total_pages %}
+        <a href="{{ url_for('blog.my_posts', page=page+1) }}">Next</a>
+      {% endif %}
+    </div>
   </form>
 
   <script>

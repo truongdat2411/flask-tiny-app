@@ -29,3 +29,6 @@ input[type=submit] { align-self: start; min-width: 10em; }
 .logout-link {text-decoration: none; color: #0366d6; padding: 0.5em 1em;}
 .logout-link:hover {text-decoration: underline;}
 .newdelete{display: inline-block; margin: 0px 20px;}
+.pagination {margin-top: 2em; display: flex; gap: 1em; justify-content: center;}
+.pagination a {text-decoration: none; color: #007bff; padding: 0.5em 1em;}
+.pagination a:hover {text-decoration: underline;}

@@ -67,16 +67,23 @@ def login():
 
     return render_template('auth/login.html')
 
+PER_PAGE = 10  
+
 @bp.route('/admin')
 def admin():
     db = get_db()
+    page = request.args.get('page', 1, type=int)  # Lấy trang hiện tại, mặc định là 1
+    offset = (page - 1) * PER_PAGE
     posts = db.execute(
-        'SELECT p.*, u.username '
-        'FROM post p '
-        'JOIN user u ON p.author_id = u.id '
-        'ORDER BY p.created DESC'
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC '
+        'LIMIT ? OFFSET ?',
+        (PER_PAGE, offset)
     ).fetchall()
-    return render_template('auth/admin.html', posts=posts)
+    total_posts = db.execute('SELECT COUNT(*) FROM post').fetchone()[0]
+    total_pages = (total_posts + PER_PAGE - 1) // PER_PAGE  # Tính tổng số trang
+    return render_template('auth/admin.html', posts=posts, page=page, total_pages=total_pages)
 
 
 @bp.route('/admin/user_management')
